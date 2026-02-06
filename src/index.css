@@ -7,40 +7,41 @@
   }
   
   body {
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
   }
 }
 
 :root {
-  --background: oklch(0.20 0.15 300);
-  --foreground: oklch(0.95 0.05 75);
+  --background: oklch(0.12 0.02 180);
+  --foreground: oklch(0.75 0.20 145);
 
-  --card: oklch(0.25 0.12 300);
-  --card-foreground: oklch(0.95 0.05 75);
+  --card: oklch(0.16 0.03 180);
+  --card-foreground: oklch(0.75 0.20 145);
   
-  --popover: oklch(0.25 0.12 300);
-  --popover-foreground: oklch(0.95 0.05 75);
+  --popover: oklch(0.16 0.03 180);
+  --popover-foreground: oklch(0.75 0.20 145);
 
-  --primary: oklch(0.35 0.08 60);
-  --primary-foreground: oklch(1 0 0);
+  --primary: oklch(0.75 0.20 145);
+  --primary-foreground: oklch(0.12 0.02 180);
   
-  --secondary: oklch(0.55 0.25 300);
-  --secondary-foreground: oklch(0.95 0.05 75);
+  --secondary: oklch(0.20 0.04 180);
+  --secondary-foreground: oklch(0.75 0.20 145);
   
-  --muted: oklch(0.30 0.10 300);
-  --muted-foreground: oklch(0.65 0.08 300);
+  --muted: oklch(0.20 0.04 180);
+  --muted-foreground: oklch(0.45 0.12 145);
   
-  --accent: oklch(0.80 0.18 75);
-  --accent-foreground: oklch(0.20 0.15 300);
+  --accent: oklch(0.80 0.15 200);
+  --accent-foreground: oklch(0.12 0.02 180);
   
   --destructive: oklch(0.55 0.25 25);
   --destructive-foreground: oklch(1 0 0);
   
-  --border: oklch(0.35 0.12 300);
-  --input: oklch(0.35 0.12 300);
-  --ring: oklch(0.75 0.15 210);
+  --border: oklch(0.30 0.08 145);
+  --input: oklch(0.30 0.08 145);
+  --ring: oklch(0.80 0.15 200);
 
-  --radius: 1.5rem;
+  --radius: 0.25rem;
 }
 
 @theme {
@@ -72,15 +73,93 @@
   --radius-full: 9999px;
 }
 
-.score-display {
-  font-family: 'Space Grotesk', monospace;
-  font-variant-numeric: tabular-nums;
+.terminal-glow {
+  text-shadow: 
+    0 0 10px oklch(0.75 0.20 145 / 0.5),
+    0 0 20px oklch(0.75 0.20 145 / 0.3),
+    0 0 30px oklch(0.75 0.20 145 / 0.2);
 }
 
-.background-pattern {
-  background: 
-    radial-gradient(circle at 20% 50%, oklch(0.30 0.20 300) 0%, transparent 50%),
-    radial-gradient(circle at 80% 30%, oklch(0.28 0.18 280) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, oklch(0.25 0.15 320) 0%, transparent 50%),
-    oklch(0.20 0.15 300);
+.terminal-window {
+  box-shadow: 
+    0 0 20px oklch(0.75 0.20 145 / 0.2),
+    inset 0 0 60px oklch(0.75 0.20 145 / 0.05);
+}
+
+.scan-lines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    oklch(0 0 0 / 0.03) 0px,
+    oklch(0 0 0 / 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.scan-lines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    oklch(0.75 0.20 145 / 0.05) 50%,
+    transparent 100%
+  );
+  animation: scan 8s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.crt-flicker {
+  animation: flicker 0.15s ease-in-out;
+}
+
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+.terminal-cursor::after {
+  content: '█';
+  animation: blink 1s step-end infinite;
+  color: oklch(0.75 0.20 145);
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
