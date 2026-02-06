@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 import FaucetPage from './FaucetPage'
 import poopImg from './components/ui/poop.jpg'
 
-type Page = 'terminal' | 'faucet'
+type Page = 'terminal' | 'toilet'
 
 interface Message {
   id: number
@@ -308,7 +308,7 @@ function App() {
     })
   }
 
-  if (page === 'faucet') {
+  if (page === 'toilet') {
     return (
       <div className="min-h-screen bg-black">
         {/* Nav Bar */}
@@ -326,10 +326,10 @@ function App() {
                 [TERMINAL]
               </button>
               <button
-                onClick={() => setPage('faucet')}
+                onClick={() => setPage('toilet')}
                 className="px-3 py-1 text-xs rounded bg-white/20 text-white border border-white/50 crt-glow"
               >
-                [FAUCET]
+                [TOILET]
               </button>
             </div>
           </div>
@@ -443,10 +443,10 @@ function App() {
               [TERMINAL]
             </button>
             <button
-              onClick={() => setPage('faucet')}
+              onClick={() => setPage('toilet')}
               className="px-3 py-1 text-xs rounded bg-transparent text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
             >
-              [FAUCET]
+              [TOILET]
             </button>
           </div>
         </div>
