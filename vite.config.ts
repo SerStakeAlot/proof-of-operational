@@ -7,7 +7,7 @@ const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/proof-of-operational/',
+  base: '/',
   plugins: [
     react(),
     tailwindcss(),
