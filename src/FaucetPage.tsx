@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import poopImg from './components/ui/poop.jpg'
 
 // ============ Types ============
 interface FaucetState {
@@ -35,7 +36,7 @@ function base58Encode(buffer: Uint8Array): string {
     }
   }
   let result = ''
-  for (let i = 0; bytes[i] === 0 && i < bytes.length - 1; i++) {
+  for (let i = 0; i < bytes.length; i++) {
     result += ALPHABET[0]
   }
   for (let i = digits.length - 1; i >= 0; i--) {
@@ -49,6 +50,26 @@ function formatCountdown(seconds: number): string {
   const m = Math.floor((seconds % 3600) / 60)
   const s = seconds % 60
   return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+}
+
+// Poop Image Component - using actual poop.jpg image
+const PoopImage = ({ size = 'normal', className = '' }: { size?: 'small' | 'normal' | 'large' | 'xlarge', className?: string }) => {
+  const sizeMap = {
+    small: 'w-6 h-6',
+    normal: 'w-12 h-12',
+    large: 'w-16 h-16',
+    xlarge: 'w-24 h-24'
+  }
+
+  return (
+    <img
+      src={poopImg}
+      alt="poop"
+      className={`${sizeMap[size]} ${className}`}
+      style={{ objectFit: 'contain' }}
+      draggable={false}
+    />
+  )
 }
 
 // ============ Component ============
@@ -277,8 +298,6 @@ export default function FaucetPage() {
     <div className="faucet-root">
       <style>{faucetCSS}</style>
 
-      <div className="faucet-bg-pattern" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -286,7 +305,11 @@ export default function FaucetPage() {
         className="faucet-container"
       >
         <header className="faucet-header">
-          <h1 className="faucet-title">💩 POOP FAUCET 💩</h1>
+          <div className="flex items-center justify-center gap-4 mb-2">
+            <PoopImage size="large" />
+            <h1 className="faucet-title">POOP FAUCET</h1>
+            <PoopImage size="large" />
+          </div>
           <p className="faucet-subtitle">Get 1 free $POOP token every hour!</p>
         </header>
 
@@ -313,7 +336,7 @@ export default function FaucetPage() {
             <div className="faucet-toilet-bowl">
               <div className={`faucet-water ${flushing ? 'flushing' : ''} ${overflowing ? 'overflow-water' : ''}`} />
               <div className={`faucet-poop ${flushing ? 'flushing' : ''} ${respawn ? 'respawn' : ''} ${overflowing ? 'overflow-poop' : ''}`}>
-                💩
+                <PoopImage size="normal" />
               </div>
             </div>
             <div className="faucet-toilet-base" />
@@ -322,7 +345,9 @@ export default function FaucetPage() {
             {overflowing && (
               <div className="faucet-overflow-splashes">
                 {Array.from({ length: 12 }).map((_, i) => (
-                  <span key={i} className="faucet-splash">💩</span>
+                  <span key={i} className="faucet-splash">
+                    <PoopImage size="small" />
+                  </span>
                 ))}
               </div>
             )}
@@ -412,7 +437,11 @@ export default function FaucetPage() {
         </div>
 
         <footer className="faucet-footer">
-          <p>Made with 💩 | Not financial advice</p>
+          <div className="flex items-center justify-center gap-2">
+            <span>Made with</span>
+            <PoopImage size="small" />
+            <span>| Not financial advice</span>
+          </div>
         </footer>
       </motion.div>
 
@@ -424,7 +453,9 @@ export default function FaucetPage() {
             animate={{ scale: 1, opacity: 1 }}
             className="faucet-modal-content"
           >
-            <div className="faucet-success-poop">💩</div>
+            <div className="faucet-success-poop">
+              <PoopImage size="xlarge" />
+            </div>
             <h2>FLUSH SUCCESSFUL!</h2>
             <p>You received <strong>1 $POOP</strong></p>
             {txSig ? (
@@ -450,19 +481,11 @@ export default function FaucetPage() {
 const faucetCSS = `
   .faucet-root {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 100%);
+    background: #000000;
     color: #fff;
     font-family: 'Segoe UI', system-ui, sans-serif;
     overflow-x: hidden;
     position: relative;
-  }
-
-  .faucet-bg-pattern {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ctext x='20' y='40' font-size='30' opacity='0.05'%3E💩%3C/text%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
   }
 
   .faucet-container {
@@ -474,7 +497,7 @@ const faucetCSS = `
 
   .faucet-title {
     font-size: 2.5rem;
-    text-shadow: 0 0 20px rgba(139, 69, 19, 0.5);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     animation: faucet-bounce 2s ease-in-out infinite;
   }
 
@@ -483,7 +506,7 @@ const faucetCSS = `
     50% { transform: translateY(-10px); }
   }
 
-  .faucet-subtitle { color: #b0a0c0; margin-top: 10px; }
+  .faucet-subtitle { color: #888; margin-top: 10px; }
 
   /* Status */
   .faucet-status-banner {
@@ -505,28 +528,31 @@ const faucetCSS = `
 
   .faucet-toilet-tank {
     position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 100px; height: 80px; background: #f5f5f5;
-    border-radius: 10px 10px 0 0; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+    width: 100px; height: 80px; background: #333;
+    border-radius: 10px 10px 0 0; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3);
+    border: 1px solid #555;
   }
 
   .faucet-toilet-lid {
     position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
-    width: 140px; height: 20px; background: #f5f5f5;
-    border-radius: 50% 50% 0 0; box-shadow: 0 -3px 10px rgba(0,0,0,0.1);
+    width: 140px; height: 20px; background: #333;
+    border-radius: 50% 50% 0 0; box-shadow: 0 -3px 10px rgba(0,0,0,0.3);
     transform-origin: bottom center; transition: transform 0.5s ease; z-index: 3;
+    border: 1px solid #555;
   }
   .faucet-toilet-lid.open { transform: translateX(-50%) rotateX(-120deg); }
 
   .faucet-toilet-bowl {
     position: absolute; top: 85px; left: 50%; transform: translateX(-50%);
-    width: 140px; height: 100px; background: #f5f5f5;
+    width: 140px; height: 100px; background: #333;
     border-radius: 50% 50% 40% 40%; overflow: hidden;
-    box-shadow: inset 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
+    border: 1px solid #555;
   }
 
   .faucet-water {
     position: absolute; bottom: 10px; left: 10%; width: 80%; height: 50px;
-    background: #87ceeb; border-radius: 50%; opacity: 0.7; transition: all 0.5s ease;
+    background: #1a4d6d; border-radius: 50%; opacity: 0.7; transition: all 0.5s ease;
   }
   .faucet-water.flushing { animation: faucet-flush-water 1.5s ease-in-out; }
   @keyframes faucet-flush-water {
@@ -538,18 +564,18 @@ const faucetCSS = `
     animation: faucet-overflow-water 3s ease-in-out;
   }
   @keyframes faucet-overflow-water {
-    0% { height: 50px; background: #87ceeb; }
-    15% { height: 70px; background: #6b9e8a; }
-    30% { height: 95px; background: #8b7914; }
-    50% { height: 110px; background: #7a5c10; }
-    70% { height: 105px; background: #6b4a0e; }
-    85% { height: 80px; background: #6b9e8a; }
-    100% { height: 50px; background: #87ceeb; }
+    0% { height: 50px; background: #1a4d6d; }
+    15% { height: 70px; background: #2a3d2d; }
+    30% { height: 95px; background: #3d3014; }
+    50% { height: 110px; background: #332610; }
+    70% { height: 105px; background: #2d1f0e; }
+    85% { height: 80px; background: #2a3d2d; }
+    100% { height: 50px; background: #1a4d6d; }
   }
 
   .faucet-poop {
     position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-    font-size: 40px; transition: all 0.5s ease; z-index: 2;
+    transition: all 0.5s ease; z-index: 2;
   }
   .faucet-poop.flushing { animation: faucet-poop-flush 1.5s ease-in-out forwards; }
   @keyframes faucet-poop-flush {
@@ -565,7 +591,6 @@ const faucetCSS = `
   }
   .faucet-poop.overflow-poop {
     animation: faucet-poop-multiply 3s ease-in-out;
-    font-size: 50px;
   }
   @keyframes faucet-poop-multiply {
     0% { transform: translateX(-50%) scale(1); }
@@ -584,14 +609,16 @@ const faucetCSS = `
 
   .faucet-toilet-base {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 120px; height: 30px; background: #f5f5f5;
-    border-radius: 0 0 20px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    width: 120px; height: 30px; background: #333;
+    border-radius: 0 0 20px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border: 1px solid #555;
   }
 
   .faucet-flush-handle {
     position: absolute; top: 30px; right: 20px;
-    width: 30px; height: 10px; background: #c0c0c0;
+    width: 30px; height: 10px; background: #666;
     border-radius: 5px; cursor: pointer; transition: transform 0.3s ease;
+    border: 1px solid #888;
   }
   .faucet-flush-handle:hover { transform: rotate(-30deg); }
   .faucet-flush-handle.pressed { transform: rotate(-45deg); }
@@ -601,21 +628,21 @@ const faucetCSS = `
     width: 240px; height: 80px; pointer-events: none; z-index: 4;
   }
   .faucet-splash {
-    position: absolute; font-size: 24px; opacity: 0;
+    position: absolute; opacity: 0;
     animation: faucet-splash-out 2.5s ease-out forwards;
   }
   .faucet-splash:nth-child(1) { left: 5%; animation-delay: 0.2s; }
-  .faucet-splash:nth-child(2) { left: 35%; animation-delay: 0.35s; font-size: 30px; }
+  .faucet-splash:nth-child(2) { left: 35%; animation-delay: 0.35s; }
   .faucet-splash:nth-child(3) { left: 75%; animation-delay: 0.5s; }
-  .faucet-splash:nth-child(4) { left: 20%; animation-delay: 0.7s; font-size: 28px; }
-  .faucet-splash:nth-child(5) { left: 55%; animation-delay: 0.85s; font-size: 32px; }
-  .faucet-splash:nth-child(6) { left: 90%; animation-delay: 0.4s; font-size: 20px; }
-  .faucet-splash:nth-child(7) { left: -5%; animation-delay: 0.6s; font-size: 26px; }
-  .faucet-splash:nth-child(8) { left: 45%; animation-delay: 1.0s; font-size: 34px; }
-  .faucet-splash:nth-child(9) { left: 10%; animation-delay: 1.2s; font-size: 22px; }
-  .faucet-splash:nth-child(10) { left: 65%; animation-delay: 1.4s; font-size: 28px; }
-  .faucet-splash:nth-child(11) { left: 30%; animation-delay: 1.6s; font-size: 20px; }
-  .faucet-splash:nth-child(12) { left: 80%; animation-delay: 1.8s; font-size: 26px; }
+  .faucet-splash:nth-child(4) { left: 20%; animation-delay: 0.7s; }
+  .faucet-splash:nth-child(5) { left: 55%; animation-delay: 0.85s; }
+  .faucet-splash:nth-child(6) { left: 90%; animation-delay: 0.4s; }
+  .faucet-splash:nth-child(7) { left: -5%; animation-delay: 0.6s; }
+  .faucet-splash:nth-child(8) { left: 45%; animation-delay: 1.0s; }
+  .faucet-splash:nth-child(9) { left: 10%; animation-delay: 1.2s; }
+  .faucet-splash:nth-child(10) { left: 65%; animation-delay: 1.4s; }
+  .faucet-splash:nth-child(11) { left: 30%; animation-delay: 1.6s; }
+  .faucet-splash:nth-child(12) { left: 80%; animation-delay: 1.8s; }
   @keyframes faucet-splash-out {
     0% { transform: translateY(0) scale(0.3) rotate(0deg); opacity: 0; }
     10% { opacity: 1; }
@@ -629,7 +656,7 @@ const faucetCSS = `
   }
   .faucet-drip {
     position: absolute; width: 8px; height: 0;
-    background: #8b6914; border-radius: 0 0 4px 4px; opacity: 0;
+    background: #5a4a14; border-radius: 0 0 4px 4px; opacity: 0;
     animation: faucet-drip-down 2.5s ease-in forwards;
   }
   .faucet-drip:nth-child(1) { left: 5%; animation-delay: 0.5s; }
@@ -646,8 +673,8 @@ const faucetCSS = `
 
   .faucet-overflow-message {
     margin-top: 15px; padding: 12px 20px;
-    background: rgba(139,69,19,0.3); border: 1px solid #d2691e;
-    border-radius: 12px; color: #d2691e; font-weight: 600; font-size: 0.95rem;
+    background: rgba(90,74,20,0.3); border: 1px solid #8a6a1e;
+    border-radius: 12px; color: #d2a01e; font-weight: 600; font-size: 0.95rem;
   }
 
   /* Wallet */
@@ -655,8 +682,9 @@ const faucetCSS = `
 
   .faucet-wallet-status {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 8px 16px; background: rgba(255,255,255,0.1);
+    padding: 8px 16px; background: rgba(255,255,255,0.05);
     border-radius: 20px; margin-bottom: 15px; font-size: 0.9rem;
+    border: 1px solid #333;
   }
 
   .faucet-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -679,20 +707,21 @@ const faucetCSS = `
   }
 
   .faucet-btn-disconnect {
-    background: rgba(255,255,255,0.1); color: #b0a0c0; font-size: 0.85rem; padding: 8px 16px;
+    background: rgba(255,255,255,0.05); color: #888; font-size: 0.85rem; padding: 8px 16px;
+    border: 1px solid #333;
   }
-  .faucet-btn-disconnect:hover { background: rgba(255,255,255,0.2); }
+  .faucet-btn-disconnect:hover { background: rgba(255,255,255,0.1); }
 
   .faucet-claim-section { margin: 30px 0; }
 
   .faucet-btn-flush {
-    background: linear-gradient(135deg, #8b4513, #d2691e);
+    background: linear-gradient(135deg, #5a4a14, #8a6a1e);
     font-size: 1.5rem; padding: 20px 50px; border-radius: 20px;
     display: inline-flex; align-items: center; gap: 10px;
-    box-shadow: 0 10px 30px rgba(139,69,19,0.4);
+    box-shadow: 0 10px 30px rgba(90,74,20,0.4);
   }
   .faucet-btn-flush:hover:not(:disabled) {
-    transform: scale(1.1); box-shadow: 0 15px 40px rgba(139,69,19,0.6);
+    transform: scale(1.1); box-shadow: 0 15px 40px rgba(90,74,20,0.6);
   }
   .faucet-btn-flush:active:not(:disabled) { transform: scale(0.95); }
   .faucet-btn-flush .faucet-btn-icon { font-size: 2rem; }
@@ -705,7 +734,7 @@ const faucetCSS = `
     75% { transform: translateX(5px); }
   }
 
-  .faucet-cooldown { margin-top: 15px; color: #b0a0c0; font-size: 1.1rem; }
+  .faucet-cooldown { margin-top: 15px; color: #888; font-size: 1.1rem; }
   .faucet-cooldown-timer { font-family: 'Courier New', monospace; font-weight: bold; color: #fbbf24; }
 
   /* Stats */
@@ -714,42 +743,46 @@ const faucetCSS = `
   }
   .faucet-stat {
     background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 12px; min-width: 120px;
+    border: 1px solid #333;
   }
-  .faucet-stat-label { display: block; font-size: 0.8rem; color: #b0a0c0; margin-bottom: 5px; }
-  .faucet-stat-value { font-size: 1.5rem; font-weight: bold; color: #d2691e; }
+  .faucet-stat-label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 5px; }
+  .faucet-stat-value { font-size: 1.5rem; font-weight: bold; color: #d2a01e; }
 
   /* Instructions */
   .faucet-instructions {
     background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px;
-    text-align: left; margin: 30px 0;
+    text-align: left; margin: 30px 0; border: 1px solid #333;
   }
-  .faucet-instructions h3 { margin-bottom: 15px; color: #d2691e; }
+  .faucet-instructions h3 { margin-bottom: 15px; color: #d2a01e; }
   .faucet-instructions ol { margin-left: 20px; }
-  .faucet-instructions li { margin: 8px 0; color: #b0a0c0; }
+  .faucet-instructions li { margin: 8px 0; color: #888; }
 
-  .faucet-footer { margin-top: 30px; color: #b0a0c0; font-size: 0.85rem; }
+  .faucet-footer { margin-top: 30px; color: #888; font-size: 0.85rem; }
 
   /* Modal */
   .faucet-modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: flex; align-items: center;
+    background: rgba(0,0,0,0.9); display: flex; align-items: center;
     justify-content: center; z-index: 1000;
   }
   .faucet-modal-content {
-    background: #2d1b4e; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;
+    background: #1a1a1a; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;
+    border: 1px solid #333;
   }
   .faucet-success-poop {
-    font-size: 80px;
     animation: faucet-success-bounce 0.5s ease infinite alternate;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
   }
   @keyframes faucet-success-bounce {
     0% { transform: translateY(0) rotate(-10deg); }
     100% { transform: translateY(-20px) rotate(10deg); }
   }
   .faucet-modal-content h2 { color: #4ade80; margin: 20px 0; }
-  .faucet-tx-link { font-size: 0.85rem; color: #b0a0c0; margin: 15px 0; word-break: break-all; }
-  .faucet-tx-link a { color: #d2691e; }
-  .faucet-btn-close { background: #4ade80; color: #1a0a2e; margin-top: 20px; }
+  .faucet-tx-link { font-size: 0.85rem; color: #888; margin: 15px 0; word-break: break-all; }
+  .faucet-tx-link a { color: #d2a01e; }
+  .faucet-btn-close { background: #4ade80; color: #000; margin-top: 20px; }
 
   @media (max-width: 480px) {
     .faucet-title { font-size: 1.8rem; }
