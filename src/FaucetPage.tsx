@@ -393,12 +393,11 @@ export default function FaucetPage() {
         {/* Flush Button */}
         <div className="faucet-claim-section">
           <button
-            className={`faucet-btn faucet-btn-flush ${state.isClaiming ? 'loading' : ''}`}
-            disabled={!state.canClaim || state.isClaiming}
-            onClick={claimTokens}
+            className="faucet-btn faucet-btn-flush"
+            disabled={true}
           >
             <span className="faucet-btn-icon">🚽</span>
-            <span>FLUSH!</span>
+            <span>COMING SOON</span>
           </button>
 
           {state.cooldownRemaining > 0 && (
