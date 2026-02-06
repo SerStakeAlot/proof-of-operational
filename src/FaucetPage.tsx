@@ -336,7 +336,7 @@ export default function FaucetPage() {
             <div className="faucet-toilet-bowl">
               <div className={`faucet-water ${flushing ? 'flushing' : ''} ${overflowing ? 'overflow-water' : ''}`} />
               <div className={`faucet-poop ${flushing ? 'flushing' : ''} ${respawn ? 'respawn' : ''} ${overflowing ? 'overflow-poop' : ''}`}>
-                <PoopImage size="normal" />
+                💩
               </div>
             </div>
             <div className="faucet-toilet-base" />
@@ -575,6 +575,7 @@ const faucetCSS = `
 
   .faucet-poop {
     position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    font-size: 40px;
     transition: all 0.5s ease; z-index: 2;
   }
   .faucet-poop.flushing { animation: faucet-poop-flush 1.5s ease-in-out forwards; }

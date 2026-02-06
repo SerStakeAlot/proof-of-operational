@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import FaucetPage from './FaucetPage'
+import poopImg from './components/ui/poop.jpg'
 
 type Page = 'terminal' | 'faucet'
 
@@ -314,7 +315,8 @@ function App() {
         <div className="fixed top-0 left-0 right-0 z-50 bg-black border-b-2 border-white font-mono">
           <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-white crt-glow text-sm">💩 POOP</span>
+              <img src={poopImg} alt="poop" className="w-5 h-5" style={{ objectFit: 'contain' }} />
+              <span className="text-white crt-glow text-sm">POOP</span>
             </div>
             <div className="flex gap-1">
               <button
@@ -430,7 +432,8 @@ function App() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-black border-b-2 border-white">
         <div className="max-w-4xl mx-auto px-4 py-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-white crt-glow text-sm">💩 POOP</span>
+            <img src={poopImg} alt="poop" className="w-5 h-5" style={{ objectFit: 'contain' }} />
+            <span className="text-white crt-glow text-sm">POOP</span>
           </div>
           <div className="flex gap-1">
             <button
